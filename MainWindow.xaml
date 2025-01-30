@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="1000" Width="1000">
     <Grid>
-        <Grid Width="800" Height="800" Background="Aqua">
+        <Grid Width="800" Height="800" Background="Aqua" x:Name="DeskGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="200"/>
