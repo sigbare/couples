@@ -11,7 +11,7 @@ namespace couples
     internal class Card
     {
         
-        BitmapImage FrontImage { get; set; }
+        BitmapImage frontImage { get; set; }
 
         string name { get; set; }
 
@@ -21,13 +21,15 @@ namespace couples
         {
             this.id = id;
             this.name = name;
-            this.FrontImage = FrontImage;
+            this.frontImage = FrontImage;
         }
 
     }
 
     class CardDeck
     {
+        private Random random = new Random();
+
         Dictionary<int, string> keyValuePairs = new Dictionary<int, string>()
         {
             {0,"image/1.jpg"},
@@ -42,23 +44,47 @@ namespace couples
 
         readonly BitmapImage backSide = new BitmapImage(new Uri("pack://application:,,,/couples;component/image/back.jpg"));
 
-        List<Card> cards = new List<Card>();
+        readonly List<Card> cards = new List<Card>();
 
         public BitmapImage GetBackSide() => this.backSide;
 
-        public void CreateCardDeck()
+        private void CreateCardDeck()
         {
             for(int i = 0; i < 8; i++)
             {
-               Enumerable.Repeat(0,2).ToList().ForEach(_ => cards.Add(new Card(i, GetName(keyValuePairs[i]),new BitmapImage(new Uri($"pack://application:,,,/couples;component/image/{keyValuePairs[i]}")))));
+               Enumerable.Repeat(0,2).ToList().ForEach(_ => cards.Add(new Card(i, GetName(keyValuePairs[i]),new BitmapImage(new Uri($"pack://application:,,,/couples;component/{keyValuePairs[i]}")))));
             }
 
 
 
         }
 
-        public string GetName(string nameFormat) => nameFormat.Remove(nameFormat.Length - 4 , 4);
+        private string GetName(string nameFormat) => nameFormat.Remove(nameFormat.Length - 4 , 4);
+
+        private List<T> Shuffle<T>(List<T> cards)
+        {
+            
+
+            if (cards == null || cards.Count <= 1)
+            {
+                return cards;
+            }
+
+            for(int i = cards.Count;  i > 0; i--)
+            {
+                int j = random.Next(i + 1);
+                T temp = cards[i];
+                cards[i] = cards[j];
+                cards[j] = temp;
+            }
+            return cards;
+        } 
 
 
+        public CardDeck()
+        {
+            CreateCardDeck();
+            this.cards = Shuffle<Card>(cards);
+        }
     }
 }
