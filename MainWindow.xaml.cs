@@ -17,24 +17,27 @@ namespace couples
     public partial class MainWindow : Window
     {
 
+        
 
         public MainWindow()
         {
             InitializeComponent();
+            CardDeck cardDeck = new CardDeck();
 
             List<Button> buttons = GetButtonsFromGrid(DeskGrid);
             int n = 0;
             foreach(var button in buttons)
             {
-                button.Content = $"it's {n} button";
+                button.Click += BT_Zero_Zero;
+                button.Content = cardDeck.cards[n].frontImage;
+                
                 n++;
-             
             }
         }
 
         private void BT_Zero_Zero(object sender, RoutedEventArgs e)
         {
-           
+            MessageBox.Show("test");
         }
 
 
@@ -53,5 +56,7 @@ namespace couples
 
             return buttons;
         }
+
+       
     }
 }
