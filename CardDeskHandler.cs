@@ -14,8 +14,6 @@ namespace couples
 
         private int counter;
 
-        
-
 
         public Image GetImage(int numberCard)
         {
