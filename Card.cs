@@ -11,13 +11,13 @@ namespace couples
     internal class Card
     {
         
-        BitmapImage frontImage { get; set; }
+       public Image frontImage { get; set; }
 
-        string name { get; set; }
+       public string name { get; set; }
 
-        int id { get; set; }
+       public int id { get; set; }
 
-        public Card(int id, string name, BitmapImage FrontImage)
+        public Card(int id, string name, Image FrontImage)
         {
             this.id = id;
             this.name = name;
@@ -42,9 +42,9 @@ namespace couples
             {7,"image/8.jpg"},
         };
 
-        readonly BitmapImage backSide = new BitmapImage(new Uri("pack://application:,,,/couples;component/image/back.jpg"));
+        public  readonly BitmapImage backSide = new BitmapImage(new Uri("pack://application:,,,/couples;component/image/back.jpg"));
 
-        readonly List<Card> cards = new List<Card>();
+        public  readonly List<Card> cards = new List<Card>();
 
         public BitmapImage GetBackSide() => this.backSide;
 
@@ -52,7 +52,7 @@ namespace couples
         {
             for(int i = 0; i < 8; i++)
             {
-               Enumerable.Repeat(0,2).ToList().ForEach(_ => cards.Add(new Card(i, GetName(keyValuePairs[i]),new BitmapImage(new Uri($"pack://application:,,,/couples;component/{keyValuePairs[i]}")))));
+               Enumerable.Repeat(0,2).ToList().ForEach(_ => cards.Add(new Card(i, GetName(keyValuePairs[i]),new Image { Source = (new BitmapImage(new Uri($"pack://application:,,,/couples;component/{keyValuePairs[i]}")))})));
             }
 
 
@@ -70,7 +70,7 @@ namespace couples
                 return cards;
             }
 
-            for(int i = cards.Count;  i > 0; i--)
+            for(int i = cards.Count - 1;  i > 0; i--)
             {
                 int j = random.Next(i + 1);
                 T temp = cards[i];
@@ -83,6 +83,7 @@ namespace couples
 
         public CardDeck()
         {
+            
             CreateCardDeck();
             this.cards = Shuffle<Card>(cards);
         }
