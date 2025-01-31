@@ -16,47 +16,48 @@ namespace couples
     /// </summary>
     public partial class MainWindow : Window
     {
+        CardDeskHandler deskHandler;
 
-        
+        public List<Button> buttons;
+
+        private int NumberOpenCard;
 
         public MainWindow()
         {
             InitializeComponent();
-            CardDeck cardDeck = new CardDeck();
 
-            List<Button> buttons = GetButtonsFromGrid(DeskGrid);
-            int n = 0;
-            foreach(var button in buttons)
+            deskHandler = new CardDeskHandler();
+
+            NumberOpenCard = 0;
+
+            buttons = deskHandler.GetButtonsFromGrid(DeskGrid);
+            
+            for(int i = 0; i < buttons.Count; i++)
             {
-                button.Click += BT_Zero_Zero;
-                button.Content = cardDeck.cards[n].frontImage;
-                button.FontStretch = 
-                n++;
+                buttons[i].Click += OpenCard;
+                buttons[i].Content = deskHandler.GetImage(i);
             }
+            
+
+            
         }
 
-        private void BT_Zero_Zero(object sender, RoutedEventArgs e)
+        private void OpenCard(object sender,  RoutedEventArgs e)
         {
-            MessageBox.Show("test");
-        }
+            var button = sender as Button;
 
-
-
-        private List<Button> GetButtonsFromGrid(Grid grid)
-        {
-            List<Button> buttons = new List<Button>();
-
-            foreach (UIElement child in grid.Children)
+            button.IsEnabled = false;
+            if (button != null)
             {
-                if (child is Button button)
-                {
-                    buttons.Add(button);
-                }
-            }
 
-            return buttons;
+            }
+            
+          
         }
 
+       
+
+       
        
     }
 }

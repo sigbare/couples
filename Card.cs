@@ -10,23 +10,28 @@ namespace couples
 {
     internal class Card
     {
+        public readonly Image backSide = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/couples;component/image/back.jpg")) };
+
+        public Image frontImage { get; set; }
+
+        public string name { get; set; }
+
+        public int id { get; set; }
+
+        public bool IsOpen { get; set; }
         
-       public Image frontImage { get; set; }
 
-       public string name { get; set; }
-
-       public int id { get; set; }
-
-        public Card(int id, string name, Image FrontImage)
+        public Card(int id, string name, Image frontImage )
         {
             this.id = id;
             this.name = name;
-            this.frontImage = FrontImage;
+            this.frontImage = frontImage;
+            IsOpen = false;
         }
 
     }
 
-    class CardDeck
+    class CardDeck 
     {
         private Random random = new Random();
 
@@ -42,11 +47,9 @@ namespace couples
             {7,"image/8.jpg"},
         };
 
-        public  readonly BitmapImage backSide = new BitmapImage(new Uri("pack://application:,,,/couples;component/image/back.jpg"));
+       
 
         public  readonly List<Card> cards = new List<Card>();
-
-        public BitmapImage GetBackSide() => this.backSide;
 
         private void CreateCardDeck()
         {
@@ -63,8 +66,7 @@ namespace couples
 
         private List<T> Shuffle<T>(List<T> cards)
         {
-            
-
+          
             if (cards == null || cards.Count <= 1)
             {
                 return cards;
