@@ -16,22 +16,21 @@ namespace couples
     /// </summary>
     public partial class MainWindow : Window
     {
-        
+        CardDeskHandler deskHandler;
 
         public MainWindow()
         {
             InitializeComponent();
 
+            deskHandler = new CardDeskHandler(DeskGrid);
            
+            
             
 
             
         }
 
-        private void OpenCard(object sender,  RoutedEventArgs e)
-        {
-           
-        }
+       
 
        
        
