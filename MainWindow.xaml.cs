@@ -17,10 +17,10 @@ namespace couples
     public partial class MainWindow : Window
     {
         CardDeskHandler deskHandler;
-
+        private Dictionary<Button, int> ButtonsKeys = new Dictionary<Button, int>();
         public List<Button> buttons;
 
-        private int NumberOpenCard;
+   
 
         public MainWindow()
         {
@@ -28,12 +28,12 @@ namespace couples
 
             deskHandler = new CardDeskHandler();
 
-            NumberOpenCard = 0;
 
             buttons = deskHandler.GetButtonsFromGrid(DeskGrid);
             
             for(int i = 0; i < buttons.Count; i++)
             {
+                ButtonsKeys.Add(buttons[i], i);
                 buttons[i].Click += OpenCard;
                 buttons[i].Content = deskHandler.GetImage(i);
             }
@@ -46,18 +46,21 @@ namespace couples
         {
             var button = sender as Button;
 
-            button.IsEnabled = false;
             if (button != null)
             {
-
+                deskHandler.cardDeck.cards[ButtonsKeys[button]].IsOpen = true;
+                button.Content = deskHandler.GetImage(ButtonsKeys[button]);
+                button.IsEnabled = false;
+                
             }
             
           
         }
 
        
-
        
+
+      
        
     }
 }

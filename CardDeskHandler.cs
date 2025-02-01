@@ -10,12 +10,13 @@ namespace couples
 {
     internal class CardDeskHandler 
     {
-        private CardDeck cardDeck = new CardDeck();
 
-        private int counter;
+      
+
+       public readonly CardDeck cardDeck = new CardDeck();
 
 
-        public Image GetImage(int numberCard)
+       public Image GetImage(int numberCard)
         {
             if (cardDeck.cards[numberCard].IsOpen)
             {
@@ -25,7 +26,7 @@ namespace couples
             return cardDeck.cards[numberCard].backSide;
         }
 
-        public List<Button> GetButtonsFromGrid(Grid grid)
+       public List<Button> GetButtonsFromGrid(Grid grid)
         {
             List<Button> buttons = new List<Button>();
 
@@ -41,10 +42,7 @@ namespace couples
         }
 
         
-
-       public delegate void InitTakeCardHandler(object sender);
-
-       public event InitTakeCardHandler? InitTakeCard;
+    
 
     }
 }

@@ -48,7 +48,6 @@ namespace couples
         };
 
        
-
         public  readonly List<Card> cards = new List<Card>();
 
         private void CreateCardDeck()
@@ -81,7 +80,6 @@ namespace couples
             }
             return cards;
         } 
-
 
         public CardDeck()
         {
