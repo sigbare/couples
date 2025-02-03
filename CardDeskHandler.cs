@@ -53,6 +53,7 @@ namespace couples
                 ButtonsDic[i].Content = GetImage(i);
             }
         }
+
         private void OpenCard(object sender, RoutedEventArgs e)
         {
             var Button = sender as Button;
@@ -63,7 +64,7 @@ namespace couples
                 {
                     cardDeck.cards[button.Key].IsOpen = true;
                     Button.Content = GetImage(button.Key);
-                     break;
+                    break;
                 }
             }
             

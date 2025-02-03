@@ -39,7 +39,7 @@ namespace couples
             this.id = id;
         }
 
-        public event EventHandler? ValueChange;
+        public event EventHandler ValueChange;
 
         protected virtual void OnValueChanged(EventArgs e)
         {
@@ -76,6 +76,8 @@ namespace couples
                 Enumerable.Repeat(0,2).ToList().ForEach(_ => cards.Add(new Card(
                     new Image { Source = new BitmapImage(new Uri($"pack://application:,,,/couples;component/{LinqForFrontImage[i]}")) },
                     i)));
+                cards[i].ValueChange += OnValueChanged;
+                
             }
         }
 
@@ -103,7 +105,10 @@ namespace couples
             this.cards = Shuffle(cards);
         }
 
-      
+        private void OnValueChanged(object sender, EventArgs e)
+        {
+            MessageBox.Show("it's work");
+        }
 
     
 
