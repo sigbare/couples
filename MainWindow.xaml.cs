@@ -18,46 +18,21 @@ namespace couples
     {
         CardDeskHandler deskHandler;
 
-        public List<Button> buttons;
-
-        private int NumberOpenCard;
-
         public MainWindow()
         {
             InitializeComponent();
 
-            deskHandler = new CardDeskHandler();
-
-            NumberOpenCard = 0;
-
-            buttons = deskHandler.GetButtonsFromGrid(DeskGrid);
-            
-            for(int i = 0; i < buttons.Count; i++)
-            {
-                buttons[i].Click += OpenCard;
-                buttons[i].Content = deskHandler.GetImage(i);
-            }
-            
-
-            
-        }
-
-        private void OpenCard(object sender,  RoutedEventArgs e)
-        {
-            var button = sender as Button;
-
-            button.IsEnabled = false;
-            if (button != null)
-            {
-
-            }
-            
+            deskHandler = new CardDeskHandler(DeskGrid);
           
+            
         }
 
        
 
        
+       
+
+      
        
     }
 }

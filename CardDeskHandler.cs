@@ -10,43 +10,78 @@ namespace couples
 {
     internal class CardDeskHandler 
     {
-        private CardDeck cardDeck = new CardDeck();
-
-        private int counter;
-
-        
-
+        private readonly CardDeck cardDeck = new ();
 
         public Image GetImage(int numberCard)
         {
             if (cardDeck.cards[numberCard].IsOpen)
             {
-                return cardDeck.cards[numberCard].frontImage;
+                return cardDeck.cards[numberCard].FrontSide;
 
             }
             return cardDeck.cards[numberCard].backSide;
         }
 
-        public List<Button> GetButtonsFromGrid(Grid grid)
-        {
-            List<Button> buttons = new List<Button>();
+        private readonly Dictionary<int, Button> ButtonsDic = [];
 
-            foreach (UIElement child in grid.Children)
+        private void FillButtonsDic(Grid grid)
+        {
+            int counter = 0;
+
+            foreach (UIElement element in grid.Children)
             {
-                if (child is Button button)
+                if(element is Button button)
                 {
-                    buttons.Add(button);
+                    
+                    ButtonsDic.Add(counter, button);
+                    counter++;
                 }
             }
-
-            return buttons;
         }
 
-        
+        public CardDeskHandler(Grid grid)
+        {
+            FillButtonsDic(grid);
+            SubscribeForButton();
+            cardDeck.RemoveCard += OnRemoveCard;
+        }
 
-       public delegate void InitTakeCardHandler(object sender);
+        private void OnRemoveCard(object? sender, EventArgs e)
+        {
+            int? id = this.cardDeck.GetRemoveCardID();
+            var cardDeck = sender as CardDeck;
+            if(id.HasValue && cardDeck is not null)
+            {
+                cardDeck.cards.RemoveAll(_ =>  _.Id == id.Value);
+            }
+           
+            
+        }
 
-       public event InitTakeCardHandler? InitTakeCard;
+        private void SubscribeForButton()
+        {
+            for (int i = 0; i < ButtonsDic.Count; i++)
+            {
+                ButtonsDic[i].Click += OpenCard;
+                ButtonsDic[i].Content = GetImage(i);
+            }
+        }
 
+        private void OpenCard(object sender, RoutedEventArgs e)
+        {
+            var Button = sender as Button;
+
+            foreach(var button in ButtonsDic)
+            {
+                if(button.Value == Button)
+                {
+                    cardDeck.cards[button.Key].IsOpen = true;
+                    Button.Content = GetImage(button.Key);
+                    MessageBox.Show( cardDeck.cards[button.Key].Id.ToString());
+                    break;
+                }
+            }
+            
+        }
     }
 }
