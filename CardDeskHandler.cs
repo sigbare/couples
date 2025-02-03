@@ -64,6 +64,7 @@ namespace couples
                 {
                     cardDeck.cards[button.Key].IsOpen = true;
                     Button.Content = GetImage(button.Key);
+                   MessageBox.Show( cardDeck.cards[button.Key].id.ToString());
                     break;
                 }
             }

@@ -46,9 +46,6 @@ namespace couples
             ValueChange?.Invoke(this, e);
         }
 
-        
-       
-
     }
 
     class CardDeck 
@@ -65,17 +62,27 @@ namespace couples
             {5,"image/6.jpg"},
             {6,"image/7.jpg"},
             {7,"image/8.jpg"},
+
         };
 
         public readonly List<Card> cards = new List<Card>();
 
         private  void CreateCardDesk()
         {
-            for(int i = 0; i < LinqForFrontImage.Count; i++)
+            for(int i = 0; i < 16; i++)
             {
-                Enumerable.Repeat(0,2).ToList().ForEach(_ => cards.Add(new Card(
-                    new Image { Source = new BitmapImage(new Uri($"pack://application:,,,/couples;component/{LinqForFrontImage[i]}")) },
-                    i)));
+                int n;
+                if(i <= 7)
+                {
+                     n = i;
+                }
+                else
+                {
+                    n = i - 8;
+                }
+                
+                 cards.Add(new Card(new Image { Source = new BitmapImage(new Uri($"pack://application:,,,/couples;component/{LinqForFrontImage[n]}")) },               
+                     n));
                 cards[i].ValueChange += OnValueChanged;
                 
             }
@@ -109,11 +116,6 @@ namespace couples
         {
             MessageBox.Show("it's work");
         }
-
-    
-
-
-
 
     }
 }
