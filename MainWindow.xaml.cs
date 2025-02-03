@@ -23,10 +23,7 @@ namespace couples
             InitializeComponent();
 
             deskHandler = new CardDeskHandler(DeskGrid);
-           
-            
-            
-
+          
             
         }
 

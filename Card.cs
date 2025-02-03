@@ -11,9 +11,9 @@ namespace couples
 {
     internal class Card
     {
-        public readonly Image backSide = new Image { Source = new BitmapImage(new Uri("pack://application:,,,/couples;component/image/back.jpg"))};
+        public readonly Image backSide = new() { Source = new BitmapImage(new Uri("pack://application:,,,/couples;component/image/back.jpg"))};
 
-        public Image frontSide {  get; set; }
+        public Image FrontSide {  get; set; }
 
         private bool _isOpen;
 
@@ -30,16 +30,16 @@ namespace couples
             }
         }
 
-        public int id { get; set; }
+        public int Id { get; set; }
 
-        public Card(Image fronSide, int id)
+        public Card(Image frontSide, int id)
         {
-            this.frontSide = fronSide;
+            FrontSide = frontSide;
             IsOpen = false;
-            this.id = id;
+            Id = id;
         }
 
-        public event EventHandler ValueChange;
+        public event EventHandler? ValueChange;
 
         protected virtual void OnValueChanged(EventArgs e)
         {
@@ -50,9 +50,9 @@ namespace couples
 
     class CardDeck 
     {
-        private Random random = new Random();
+        private readonly Random random = new();
 
-        Dictionary<int, string> LinqForFrontImage = new Dictionary<int, string>()
+        readonly Dictionary<int, string> LinqForFrontImage = new ()
         {
             {0,"image/1.jpg"},
             {1,"image/2.jpg"},
@@ -65,13 +65,17 @@ namespace couples
 
         };
 
-        public readonly List<Card> cards = new List<Card>();
+        private int? lastGetId = null;
+
+
+        public readonly List<Card> cards = [];
 
         private  void CreateCardDesk()
         {
             for(int i = 0; i < 16; i++)
             {
-                int n;
+                int n;   // take id number for create two same cards 
+
                 if(i <= 7)
                 {
                      n = i;
@@ -81,14 +85,14 @@ namespace couples
                     n = i - 8;
                 }
                 
-                 cards.Add(new Card(new Image { Source = new BitmapImage(new Uri($"pack://application:,,,/couples;component/{LinqForFrontImage[n]}")) },               
+                cards.Add(new Card(new Image { Source = new BitmapImage(new Uri($"pack://application:,,,/couples;component/{LinqForFrontImage[n]}")) },               
                      n));
                 cards[i].ValueChange += OnValueChanged;
                 
             }
         }
 
-        private List<T> Shuffle<T>(List<T> cards)
+        private List<T>? Shuffle<T>(List<T> cards)
         {
 
             if (cards == null || cards.Count <= 1)
@@ -99,9 +103,7 @@ namespace couples
             for (int i = cards.Count - 1; i > 0; i--)
             {
                 int j = random.Next(i + 1);
-                T temp = cards[i];
-                cards[i] = cards[j];
-                cards[j] = temp;
+                (cards[j], cards[i]) = (cards[i], cards[j]);
             }
             return cards;
         }
@@ -112,10 +114,55 @@ namespace couples
             this.cards = Shuffle(cards);
         }
 
-        private void OnValueChanged(object sender, EventArgs e)
+        private void OnValueChanged(object? sender, EventArgs e)
         {
-            MessageBox.Show("it's work");
+            Card? card = sender as Card;
+            if(lastGetId is not null && card is not null)
+            {
+                if(lastGetId == card.Id)
+                {
+                    OnRemoveCard(EventArgs.Empty);
+                }
+                else
+                {
+                   foreach(Card card1 in cards)
+                    {
+                        if (card1.Id == card.Id)
+                        {
+                            card1.IsOpen = false;
+                            
+                        }
+                            
+                    }
+
+
+
+                    lastGetId = null;
+                }
+
+            }
+            else
+            {
+                lastGetId = card.Id;
+                MessageBox.Show("записали");
+            }
+            
         }
 
+        
+
+        public event EventHandler? RemoveCard;
+
+        
+
+        protected virtual void OnRemoveCard(EventArgs e)
+        {
+            RemoveCard?.Invoke(this, e);
+        }
+
+        public int? GetRemoveCardID()
+        {
+            return lastGetId;
+        }
     }
 }
