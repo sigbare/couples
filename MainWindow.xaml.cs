@@ -16,15 +16,29 @@ namespace couples
     /// </summary>
     public partial class MainWindow : Window
     {
-        CardDeskHandler deskHandler;
+        DeskHandler handler;
+        private int _numberCards = 16;
+        
 
         public MainWindow()
         {
             InitializeComponent();
 
-            deskHandler = new CardDeskHandler(DeskGrid);
-          
-            
+
+            handler = new DeskHandler(_numberCards);
+
+            foreach(var item in DeskGrid.Children)
+            {
+                if(item is Button)
+                {
+                    handler.FillButtons(button: (Button)item);
+                }
+            }
+
+            for(int i = 0; i < _numberCards; i++)
+            {
+                handler.SetImage(i);
+            }
         }
 
        
