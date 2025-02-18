@@ -33,8 +33,12 @@ namespace couples
         public void SetImage(int ButtonId)
         {
             
-
             buttons[ButtonId].Content = cardDeck.Cards[ButtonId].FrontImage;
+        }
+
+        public void SetClick()
+        {
+
         }
     }
 }
