@@ -32,7 +32,6 @@ namespace couples
 
         }
 
-
         private List<Button> GetButtonList()
         {
             List<Button> _bt = [];
@@ -50,7 +49,6 @@ namespace couples
 
     public class Card : INotifyPropertyChanged
     {
-
 
         private Button _button { get; set; }
 
@@ -70,20 +68,26 @@ namespace couples
                 if (value != _IsOpent)
                 {
                     _IsOpent = value;
-                    OnPropertyChange();
+                     OnPropertyChanged(nameof(IsOpen));
                 }
 
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public Card(Button button, int _cardId, Image FrontSide)
         {
             _button = button;
             this.FrontSide = FrontSide;
             _button.Click += ButtonClik;
-            this._cardId = _cardId;
+            this._cardId = _cardId; 
 
+        }
 
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void ButtonClik(object sender, RoutedEventArgs e)
@@ -93,11 +97,10 @@ namespace couples
             if (IsOpen)
             {
                 _button.IsEnabled = false;
-               
             }
         }
 
-        private void SetActualImage(Image backSide, Image frontSide)
+        public void SetActualImage(Image backSide, Image frontSide)
         {
             if (IsOpen == false)
                 _button.Content = backSide;
@@ -105,18 +108,29 @@ namespace couples
                 _button.Content = frontSide;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChange([CallerMemberName] string propertyName = null)
+        public void EnableCards(bool enable)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+            if (!enable)
+            {
+                _button.Visibility = Visibility.Hidden;
+                _button.IsEnabled = false;
+            }
+
+            else
+            {
+                _button.Visibility = Visibility.Visible;
+                _button.IsEnabled = true;
+            }
+           
+           }
+                
 
     }
 
 
-    public class DeskHandler
+    public class DeskHandler 
     {
+       
         Dictionary<int, string> FrontSideImage = new()
         {
             {0, "pack://application:,,,/couples;component/image/1.jpg"},
@@ -139,6 +153,46 @@ namespace couples
             set
             {
                 _countOpenCard = value;
+                if(_countOpenCard == 2)
+                {
+                    checkedOpenCards();
+                    _countOpenCard = 0;
+                }
+            }
+        }
+
+        private void checkedOpenCards()
+        {
+            List<Card> couples = [];
+
+            foreach (Card card in cards)
+            {
+                if (card.IsOpen)
+                {
+                    couples.Add(card);
+                }
+            }
+
+            if(couples.Count == 2)
+            {
+                if (couples[0]._cardId == couples[1]._cardId)
+                {
+                    foreach(var item in couples)
+                    {
+                        item.EnableCards(false);
+                        item.IsOpen = false;
+                    }
+                    MessageBox.Show("you found couples");
+                }
+                else
+                {
+                    foreach(var item in couples)
+                    {
+                        item.IsOpen = false;
+                        item.SetActualImage(item.BackSide,item.FrontSide);
+                        item.EnableCards(true);
+                    }
+                }
             }
         }
 
@@ -150,17 +204,28 @@ namespace couples
             {
                 cards.Add(new Card(buttons[i], temp, new Image { Source = new BitmapImage(new Uri(FrontSideImage[temp])) }));
                 buttons[i].Content = cards[i].BackSide;
-                cards[i].PropertyChanged += OnPropertyChange();
+                cards[i].PropertyChanged += Card_PropertyChanged;
                 if (i % 2 != 0)
                     temp++;
             }
 
         }
-
-        private static void OnPropertyChange(object sender, PropertyChangedEventArgs e)
+        private void Card_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (e.PropertyName == nameof(Card.IsOpen))
+            {
+                var temp = sender as Card;
+                if(temp != null)
+                {
+                    if (temp.IsOpen == true)
+                        CountOpenCard++;
+                }
+              
 
+ 
+            }
         }
+
     }
 }
 
