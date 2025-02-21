@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:couples"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1000" Width="1000">
+        Title="" Height="1000" Width="1000">
     <Grid>
         <TextBlock x:Name="TimerLable" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0"/>
         <Grid Width="800" Height="800" Background="Aqua" x:Name="DeskGrid">

@@ -29,6 +29,7 @@ namespace couples
                     if (value != _IsOpent)
                     {
                         _IsOpent = value;
+
                         OnPropertyChanged(nameof(IsOpen));
                     }
 
@@ -48,13 +49,13 @@ namespace couples
 
             protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
             {
+                SetActualImage(BackSide, FrontSide);
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
 
             private void ButtonClik(object sender, RoutedEventArgs e)
             {
                 IsOpen = IsOpen != true;
-                SetActualImage(BackSide, FrontSide);
                 if (IsOpen)
                 {
                     _button.IsEnabled = false;

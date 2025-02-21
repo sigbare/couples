@@ -15,7 +15,7 @@ namespace couples
         private readonly DeskHandler _handler;
         [Required]
         private DispatcherTimer _timer;
-        private int _remainingTime = 15;
+        private int _remainingTime = 30;
 
         public MainWindow()
         {
@@ -23,7 +23,7 @@ namespace couples
             InitializeTimer();
             _buttons = GetButtonList();
 
-            _handler = new DeskHandler(_buttons);
+            _handler = new DeskHandler(_buttons, this);
 
 
         }
